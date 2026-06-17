@@ -47,6 +47,16 @@ def load_case(size, subcase):
         for _, row in distances_df.iterrows()
     }
 
+    centers = list(distances_df["Center"].unique())
+    demand_zones = list(distances_df["DemandZone"].unique())
+    subsections = sorted({k[2] for k in d.keys()})
+
+    n_centers = len(centers)
+    n_demand = len(demand_zones)
+    n_subsections = len(subsections)
+
+    sub_map = {idx + 1: sub for idx, sub in enumerate(subsections)}
+
     risks_df = pd.read_csv(risk_file)
 
     if "Unnamed: 0" in risks_df.columns:
@@ -64,4 +74,11 @@ def load_case(size, subcase):
         "distance": d,
         "risk_df": risks_df,
         "risk": R_comp,
+        "centers": centers,
+        "demand_zones": demand_zones,
+        "subsections": subsections,
+        "n_centers": n_centers,
+        "n_demand": n_demand,
+        "n_subsections": n_subsections,
+        "sub_map": sub_map,
     }

@@ -18,3 +18,16 @@ print("Risk entries:", len(data["risk"]))
 
 print()
 print(data["risk_df"].head())
+
+print()
+print(data["centers"])
+
+print(data["demand_zones"][:5])
+
+print(data["subsections"])
+
+print()
+
+print(data["n_centers"], data["n_demand"], data["n_subsections"])
+
+print(data["sub_map"])
