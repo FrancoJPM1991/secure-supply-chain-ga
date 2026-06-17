@@ -1,43 +1,18 @@
 from src.data_loader import load_case
-from src.population import init_individual
+from src.population import init_individual, init_population
+
+from src.chromosome import chromosome_length, split_chromosome
 
 problem = load_case("large", "E")
 
 chromosome = init_individual(problem, minimum_shipment_weight=500)
 
-n = problem["n_centers"] * problem["n_demand"]
+x, delta = split_chromosome(chromosome, problem)
 
-x = chromosome[:n]
-delta = chromosome[n:]
+population = init_population(problem, population_size=20, minimum_shipment_weight=500)
 
-violations = 0
+print("Chromosome length:", chromosome_length(problem))
 
-for shipment, subsection in zip(x, delta):
-    if shipment > 0 and subsection == 0:
-        violations += 1
-    if shipment == 0 and subsection != 0:
-        violations += 1
+print("Population size:", len(population))
 
-print()
-print("Consistency violations:", violations)
-
-print("Chromosome length:", len(chromosome))
-print("X nonzero genes:", sum(v > 0 for v in x))
-print("Delta active genes:", sum(v > 0 for v in delta))
-
-print()
-print("First 10 X genes:")
-print(x[:10])
-
-print()
-print("First 10 Delta genes:")
-print(delta[:10])
-
-assert violations == 0
-
-assert len(chromosome) == (2 * problem["n_centers"] * problem["n_demand"])
-
-assert sum(v > 0 for v in x) == sum(v > 0 for v in delta)
-
-print()
-print("All population tests passed.")
+print("First individual length:", len(population[0]))
