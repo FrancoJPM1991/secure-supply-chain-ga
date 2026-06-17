@@ -1,6 +1,11 @@
 from src.data_loader import load_case
 
-D = load_case("large", "E")
+data = load_case("large", "E")
 
-print(D)
-print(sum(D.values()))
+print("Demand:", data["D"])
+print("Demand total:", sum(data["D"].values()))
+
+print()
+
+print("Supply:", data["S"])
+print("Supply total:", sum(data["S"].values()))

@@ -29,4 +29,11 @@ def load_case(size, subcase):
         D = dict(zip(headers, values))
     D = {key: int(float(value)) for key, value in D.items()}
 
-    return D
+    with open(supply_file, "r") as f:
+        reader = csv.reader(f)
+        headers = next(reader)
+        values = next(reader)
+        S = dict(zip(headers, values))
+
+    S = {key: int(float(value)) for key, value in S.items()}
+    return {"D": D, "S": S}
