@@ -1,0 +1,6 @@
+Seeds used for each case
+A seed 42
+B seed 420
+C seed 4200
+D seed 24
+E seed 240
