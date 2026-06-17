@@ -36,4 +36,12 @@ def load_case(size, subcase):
         S = dict(zip(headers, values))
 
     S = {key: int(float(value)) for key, value in S.items()}
-    return {"D": D, "S": S}
+
+    distances_df = pd.read_csv(distance_file)
+
+    d = {
+        (row["Center"], row["DemandZone"], row["Subsection"]): row["Distance_km"]
+        for _, row in distances_df.iterrows()
+    }
+
+    return {"D": D, "S": S, "distance_df": distances_df, "distance": d}
