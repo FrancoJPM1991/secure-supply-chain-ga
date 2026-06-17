@@ -67,6 +67,16 @@ def load_case(size, subcase):
         for _, row in risks_df.iterrows()
     }
 
+    tolls_df = pd.read_csv(tolls_file)
+
+    if "Unnamed: 0" in tolls_df.columns:
+        tolls_df = tolls_df.drop(columns=["Unnamed: 0"])
+
+    C_toll = {
+        (row["Center"], row["DemandZone"], row["Subsection"]): row["TollCost"]
+        for _, row in tolls_df.iterrows()
+    }
+
     return {
         "D": D,
         "S": S,
@@ -81,4 +91,6 @@ def load_case(size, subcase):
         "n_demand": n_demand,
         "n_subsections": n_subsections,
         "sub_map": sub_map,
+        "tolls_df": tolls_df,
+        "tolls": C_toll,
     }

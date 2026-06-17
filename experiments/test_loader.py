@@ -31,3 +31,8 @@ print()
 print(data["n_centers"], data["n_demand"], data["n_subsections"])
 
 print(data["sub_map"])
+
+print()
+print("Toll entries:", len(data["tolls"]))
+print()
+print(data["tolls_df"].head())
