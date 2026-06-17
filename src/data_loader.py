@@ -39,9 +39,29 @@ def load_case(size, subcase):
 
     distances_df = pd.read_csv(distance_file)
 
+    if "Unnamed: 0" in distances_df.columns:
+        distances_df = distances_df.drop(columns=["Unnamed: 0"])
+
     d = {
         (row["Center"], row["DemandZone"], row["Subsection"]): row["Distance_km"]
         for _, row in distances_df.iterrows()
     }
 
-    return {"D": D, "S": S, "distance_df": distances_df, "distance": d}
+    risks_df = pd.read_csv(risk_file)
+
+    if "Unnamed: 0" in risks_df.columns:
+        risks_df = risks_df.drop(columns=["Unnamed: 0"])
+
+    R_comp = {
+        (row["Center"], row["DemandZone"], row["Subsection"]): row["CompositeRisk"]
+        for _, row in risks_df.iterrows()
+    }
+
+    return {
+        "D": D,
+        "S": S,
+        "distance_df": distances_df,
+        "distance": d,
+        "risk_df": risks_df,
+        "risk": R_comp,
+    }
