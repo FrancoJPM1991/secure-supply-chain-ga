@@ -1,237 +1,135 @@
 # Secure Supply Chain Genetic Algorithm
 
-A modular Genetic algorithm (GA) for optimizing secure supply chain routing under transportation cost and criminal risk
+A modular Genetic Algorithm (GA) for optimizing secure supply chain routing under transportation costs and criminal risks.
 
 ## Introduction
 
-This projects implements a GA to optimize various size increasing cases where criminal risk and cost act as main optmizaion variables. 
+This project implements a GA to optimize supply chain distribution models across scaling problem instances where criminal risk and operational costs act as the main optimization variables. 
+
 The model allocates product flows (depicted as weights) from distribution centers i to demand zones j through k possible routes while minimizing:
+- Transportation costs
+- Route security risks
+- Constraint violations
 
-- Transportation cost;
-- Route security risk;
-- Constraint violations.
+The algorithm explicitly evaluates: 
+- Distribution center capacities
+- Demand satisfaction
+- Alternative route subsections
+- Security escort requirements
+- Toll costs
+- Fuel consumption
+- Driver wages
+- Variable travel speeds based on route risk
+- Minimum shipment sizes
+- Maximum transit times
 
-The algorithm considers: 
+The implementation follows a modular architecture to facilitate experimentation, parameter tuning, and future research extensions.
 
-- Distribution center capacities;
-- Demand satisfaction;
-- Alternative route subsections;
-- Security escort requirements;
-- Toll costs;
-- Fuel consumption;
-- Driver wages;
-- Variable travel speeds based on route risk;
-- Minimum shipment sizes;
-- Maximum transit times.
+### Contact & Support
+For questions, collaborations, or suggestions, feel free to contact:
 
-The implementation follows a modular architecture to facilitate experimentation and future research. 
-Any questions or suggestions? Feel free to contact us:
+**Franco Josué Patiño Morales, M.Sc.**
+- Email: franco.jpm@gmail.com
 
-Franco Josué Patiño Morales, M.Sc.
-- franco.jpm@gmail.com.
- 
-Do you want to use this repository in academic work? Please cite:
+### Citation
+If you use this repository or its data instances in academic work, please cite it as follows:
 
-- Franco Josué Patiño Morales;
-- Secure Supply Chain Genetic Algorithm;
-- GitHub repository;
-- 2026.
+> Franco Josué Patiño Morales. (2026). Secure Supply Chain Genetic Algorithm [GitHub Repository]. https://github.com/FrancoJPM1991/secure-supply-chain-ga.git 
 
-Take a look to the related journal article:
-
-- xxxxxxxxxxxxxxxxxxxxxxxx
+*Related journal article:*
+- []
 
 ## Optimization Objectives
 
-The fitness function combines transportation cost, route risk and penalties:
+The fitness function minimizes a weighted objective combining transportation costs, route risks, and constraint penalties:
 
-Fitness = α Risk + β Cost + Penalties
+\[\text{Fitness} = \alpha \cdot \text{Risk} + \beta \cdot \text{Cost} + \text{Penalties}\]
 
-where:
+Where:
+- α: Risk sensitivity weight
+- β: Cost sensitivity weight
 
-- α = risk weight;
-- β = cost weight.
-
-Penalty functions enforce operational constraints
+Penalty functions strictly enforce operational constraints (e.g., capacity limits, transit deadlines).
 
 ## Chromosome Structure
 
-Each chromosome consists of two sections:
+Each chromosome consists of a dual-section array representation to manage continuous flow allocations alongside discrete routing decisions:
 
-### Continuous section
+### 1. Continuous Section (\(X_{i,j}\))
+Represents the exact shipment weight allocated from distribution center i to demand zone j.
 
-X(i,j)
+### 2. Integer Section (\(\delta_{i,j}\))
+Defines the selected operational route indicator:
+- `0` = Inactive path
+- `1` = Route 1
+- `2` = Route 2
+- `3` = Route 3
 
-Shipment weight from distribution center i to demand zone j.
-
-### Integer section
-
-δ(i,j)
-
-Selected route:
-
-0 = inactive
-
-1 = route 1
-
-2 = route 2
-
-3 = route 3
-
-Total chromosome length:
-
-2 × (Number of centers × Number of demand zones)
+**Total Chromosome Length:**  
+2 × (Number of Centers × Number of Demand Zones)
 
 ## Evolutionary Operators
 
-- Tournament selection;
-- Elitism;
-- Column-based crossover;
-- Adaptive mutation;
-- Repair operator;
-- Progressive penalization.
+- **Selection:** Tournament selection
+- **Elitism:** Direct survival of top-performing individual solutions
+- **Crossover:** Column-based crossover adapted for matrix structures
+- **Mutation:** Adaptive mutation rates scaled by generation progress
+- **Constraint Handling:** Integrated repair operator and progressive penalization
 
-## Running
+## Getting Started
 
-Execute:
+### Prerequisites
+Make sure you have Python 3.8+ installed on your system.
 
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/FrancoJPM1991/secure-supply-chain-ga.git 
+   cd secure-supply-chain-ga
+   ```
+2. Install the required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Running the Code
+Execute the algorithm module from the root folder of the repository:
+```bash
 python -m src.ga
-
-Problem instances and GA parameters can be modified in src/config.py.
+```
+*Note: Problem instances and GA hyperparameters (population size, mutation rates, weights) can be modified directly in `src/config.py`.*
 
 ## Repository Structure
 
-### data
+### Data Files Directory (`/data/raw/`)
+The instances are split into **Small**, **Medium**, and **Large** cases containing the following matrices:
+- `distance_...`: Physical distances for each route k.
+- `D_...`: Matrix identifying demand requirements at each point j.
+- `S_...`: Supply capabilities for each center i.
+- `risk_...`: Historic criminal risk probabilities evaluated along route k.
+- `tolls_...`: Fixed toll costs associated with route k.
+- `Seed_...`: Explicit random seed matrices to guarantee reproducible runs.
 
-- distance_... : distances for each route k;
-- D_... : demand of each point j;
-- S_... : supply of each point i;
-- risk_... : risk associated to each route k;
-- tolls_... : tolls associated to each route k;
-- Seed_... : seeds used to recreate comparable solutions.
-
+```text
 secure-supply-chain-ga/
-
-C:.
-|   .gitignore
-|   LICENSE
-|   README.md
-|   requirements.txt
-|
-+---data
-|   \---raw
-|       +---Large
-|       |       distance_df9C_25D_A.csv
-|       |       distance_df9C_25D_B.csv
-|       |       distance_df9C_25D_C.csv
-|       |       distance_df9C_25D_D.csv
-|       |       distance_df9C_25D_E.csv
-|       |       D_9C_25D_A.csv
-|       |       D_9C_25D_B.csv
-|       |       D_9C_25D_C.csv
-|       |       D_9C_25D_D.csv
-|       |       D_9C_25D_E.csv
-|       |       risk_df9C_25D_A.csv
-|       |       risk_df9C_25D_B.csv
-|       |       risk_df9C_25D_C.csv
-|       |       risk_df9C_25D_D.csv
-|       |       risk_df9C_25D_E.csv
-|       |       Seed_9C_25D.txt
-|       |       S_9C_25D_A.csv
-|       |       S_9C_25D_B.csv
-|       |       S_9C_25D_C.csv
-|       |       S_9C_25D_D.csv
-|       |       S_9C_25D_E.csv
-|       |       tolls_df9C_25D_A.csv
-|       |       tolls_df9C_25D_B.csv
-|       |       tolls_df9C_25D_C.csv
-|       |       tolls_df9C_25D_D.csv
-|       |       tolls_df9C_25D_E.csv
-|       |
-|       +---Medium
-|       |       distance_df6C_14D_A.csv
-|       |       distance_df6C_14D_B.csv
-|       |       distance_df6C_14D_C.csv
-|       |       distance_df6C_14D_D.csv
-|       |       distance_df6C_14D_E.csv
-|       |       D_6C_14D_A.csv
-|       |       D_6C_14D_B.csv
-|       |       D_6C_14D_C.csv
-|       |       D_6C_14D_D.csv
-|       |       D_6C_14D_E.csv
-|       |       risk_df6C_14D_A.csv
-|       |       risk_df6C_14D_B.csv
-|       |       risk_df6C_14D_C.csv
-|       |       risk_df6C_14D_D.csv
-|       |       risk_df6C_14D_E.csv
-|       |       Seed_6C_14D.txt
-|       |       S_6C_14D_A.csv
-|       |       S_6C_14D_B.csv
-|       |       S_6C_14D_C.csv
-|       |       S_6C_14D_D.csv
-|       |       S_6C_14D_E.csv
-|       |       tolls_df6C_14D_A.csv
-|       |       tolls_df6C_14D_B.csv
-|       |       tolls_df6C_14D_C.csv
-|       |       tolls_df6C_14D_D.csv
-|       |       tolls_df6C_14D_E.csv
-|       |
-|       \---Small
-|               distance_df3C_5D_A.csv
-|               distance_df3C_5D_B.csv
-|               distance_df3C_5D_C.csv
-|               distance_df3C_5D_D.csv
-|               distance_df3C_5D_E.csv
-|               D_3C_5D_A.csv
-|               D_3C_5D_B.csv
-|               D_3C_5D_C.csv
-|               D_3C_5D_D.csv
-|               D_3C_5D_E.csv
-|               risk_df3C_5D_A.csv
-|               risk_df3C_5D_B.csv
-|               risk_df3C_5D_C.csv
-|               risk_df3C_5D_D.csv
-|               risk_df3C_5D_E.csv
-|               Seed_3C_5D.txt
-|               S_3C_5D_A.csv
-|               S_3C_5D_B.csv
-|               S_3C_5D_C.csv
-|               S_3C_5D_D.csv
-|               S_3C_5D_E.csv
-|               tolls_df3C_5D_A.csv
-|               tolls_df3C_5D_B.csv
-|               tolls_df3C_5D_C.csv
-|               tolls_df3C_5D_D.csv
-|               tolls_df3C_5D_E.csv
-|
-+---experiments
-|      test_crossover.py
-|      test_elitism.py
-|      test_fitness.py
-|      test_ga.py
-|      test_loader.py
-|      test_mutation.py
-|      test_population.py
-|      test_problem.py
-|      test_repair.py
-|      test_selection.py
-|      __init__.py
-|   
-|   
-|
-+---results
-\---src
-       chromosome.py
-       config.py
-       crossover.py
-       data_loader.py
-       elitism.py
-       fitness.py
-       ga.py
-       mutation.py
-       population.py
-       repair.py
-       selection.py
-       __init__.py
-    
-    
+├── data/
+│   └── raw/
+│       ├── Large/
+│       ├── Medium/
+│       └── Small/
+├── experiments/
+│   ├── test_crossover.py
+│   ├── test_fitness.py
+│   ├── test_ga.py
+│   └── ... (modular component unit tests)
+├── src/
+│   ├── chromosome.py
+│   ├── config.py
+│   ├── data_loader.py
+│   ├── ga.py
+│   └── ... (core algorithm mechanics)
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
+```
