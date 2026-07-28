@@ -43,7 +43,9 @@ If you use this repository or its data instances in academic work, please cite i
 
 The fitness function minimizes a weighted objective combining transportation costs, route risks, and constraint penalties:
 
-\[\text{Fitness} = \alpha \cdot \text{Risk} + \beta \cdot \text{Cost} + \text{Penalties}\]
+$$
+\text{Fitness} = \alpha \cdot \text{Risk} + \beta \cdot \text{Cost} + \text{Penalties}
+$$
 
 Where:
 - α: Risk sensitivity weight
@@ -55,10 +57,10 @@ Penalty functions strictly enforce operational constraints (e.g., capacity limit
 
 Each chromosome consists of a dual-section array representation to manage continuous flow allocations alongside discrete routing decisions:
 
-### 1. Continuous Section (\(X_{i,j}\))
+### 1. Continuous Section ($X_{i,j}$)
 Represents the exact shipment weight allocated from distribution center i to demand zone j.
 
-### 2. Integer Section (\(\delta_{i,j}\))
+### 2. Integer Section ($\delta_{i,j}$)
 Defines the selected operational route indicator:
 - `0` = Inactive path
 - `1` = Route 1
