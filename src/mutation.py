@@ -1,6 +1,5 @@
 import random
 import numpy as np
-
 from src.repair import repair_individual
 
 

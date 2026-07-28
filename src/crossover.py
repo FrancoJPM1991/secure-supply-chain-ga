@@ -1,7 +1,5 @@
 import random
 
-from src.chromosome import split_chromosome
-
 
 def crossover(parent1, parent2, problem):
 

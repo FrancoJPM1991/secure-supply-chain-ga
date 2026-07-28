@@ -3,12 +3,6 @@ import csv
 
 
 def load_case(size, subcase):
-    """
-    Function used to un-package data from raw .csv
-    :param size: "small", "medium", "large"
-    :param subcase: "A", "B", "C", "D", "E"
-    :return:
-    """
     size_map = {"small": "3C_5D", "medium": "6C_15D", "large": "9C_25D"}
 
     problem_size = size_map[size]

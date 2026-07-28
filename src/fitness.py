@@ -1,5 +1,6 @@
 import numpy as np
 
+
 from src.chromosome import split_chromosome
 from src.config import (
     __cached__,
@@ -102,7 +103,7 @@ def evaluate(chromosome, problem, gen=0, n_generations=1):
 
     penalty = 0.0
 
-    # Over connected zones
+    # Over connected zones / Zonas con exceso de conexiones
     for j in range(n_demand):
         active_centers = sum(
             1 for i in range(n_centers) if X[i, j] > 1e-2 and Delta[i, j] > 0
@@ -112,7 +113,7 @@ def evaluate(chromosome, problem, gen=0, n_generations=1):
                 active_centers - MAX_CENTERS_PER_ZONE
             )
 
-    # Demand satisfaction
+    # Demand satisfaction / Satisfacción de la demanda
     for j in range(n_demand):
         demand_satisfied = sum(X[i, j] for i in range(n_centers))
         demand_required = D[demand_zones[j]]
@@ -120,26 +121,26 @@ def evaluate(chromosome, problem, gen=0, n_generations=1):
             shortfall = demand_required - demand_satisfied
             penalty += penalty_weights["under_supply"] * shortfall
 
-    # Supply
+    # Supply / Suministro
     for i in range(n_centers):
         supplied = sum(X[i, j] for j in range(n_demand))
         if supplied > S[centers[i]]:
             penalty += penalty_weights["over_supply"] * abs(supplied - S[centers[i]])
 
-    # Continuity
+    # Continuity / Continuidad
     for i in range(n_centers):
         for j in range(n_demand):
             if Delta[i, j] == 0 and X[i, j] > 0:
                 penalty += penalty_weights["continuity"]
 
-    # Minimum shipment
+    # Minimum shipment / Envío mínimo
     for i in range(n_centers):
         for j in range(n_demand):
             if Delta[i, j] > 0 and X[i, j] < MINIMUM_SHIPMENT_WEIGHT:
                 shortfall = MINIMUM_SHIPMENT_WEIGHT - X[i, j]
                 penalty += penalty_weights["min_shipment"] * shortfall
 
-    # Maximum travel time
+    # Maximum travel time / Tiempo máximo de viaje
     for i in range(n_centers):
         for j in range(n_demand):
             if Delta[i, j] > 0:
@@ -158,7 +159,7 @@ def evaluate(chromosome, problem, gen=0, n_generations=1):
                         travel_time - MAX_TRANSIT_TIME_HR
                     )
 
-    # Sparsity incentive
+    # Sparsity incentive / Incentivo de escasez
     lambda_sparse = 0 * progressive_penalization
     n_active_routes = sum(
         1

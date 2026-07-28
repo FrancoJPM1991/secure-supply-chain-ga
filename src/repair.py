@@ -21,7 +21,7 @@ def repair_individual(individual, problem, minimum_shipment_weight=300):
     delta_flat = individual[continuous_len:]
 
     Delta = np.array(delta_flat, dtype=int).reshape((n_centers, n_demand))
-    # There can't be an individual without active routes
+    # There can't be an individual without active routes / No puede existir un individuo sin rutas activas
     total_active_routes = np.sum(Delta > 0)
     if total_active_routes == 0:
         for j in range(n_demand):
@@ -30,7 +30,7 @@ def repair_individual(individual, problem, minimum_shipment_weight=300):
                 Delta[i, j] = random.randint(1, n_subsections)
                 X[i, j] = max(X[i, j], minimum_shipment_weight)
 
-    # If there is an active route it must have a designated weight
+    # If there is an active route it must have a designated weight / Si existe una ruta activa debe tener un peso asignado
     for i in range(n_centers):
         for j in range(n_demand):
             if Delta[i, j] == 0:
@@ -38,7 +38,7 @@ def repair_individual(individual, problem, minimum_shipment_weight=300):
             elif 0 < X[i, j] < minimum_shipment_weight:
                 X[i, j] = minimum_shipment_weight
 
-    # A supply center can't supply more than available stock
+    # A supply center can't supply more than available stock / Un centro de suministro no puede suministrar más de lo disponible
     for i in range(n_centers):
         total_supply_from_center = float(np.sum(X[i, :]))
         capacity = S[centers[i]]
@@ -49,7 +49,7 @@ def repair_individual(individual, problem, minimum_shipment_weight=300):
                 if X[i, j] < minimum_shipment_weight and Delta[i, j] > 0:
                     X[i, j] = minimum_shipment_weight
 
-    # Demand can't be unfullfilled
+    # Demand can't be unfullfilled / La demanda no puede quedar insatisfecha
     for j in range(n_demand):
         total_supply_to_zone = float(np.sum(X[:, j]))
         demand = D[demand_zones[j]]
@@ -73,7 +73,7 @@ def repair_individual(individual, problem, minimum_shipment_weight=300):
                     if X[i, j] < minimum_shipment_weight and X[i, j] > 0:
                         X[i, j] = minimum_shipment_weight
 
-    # Supply last check
+    # Supply last check / Última verificación de suministro
     for i in range(n_centers):
         total_supply = float(np.sum(X[i, :]))
         capacity = S[centers[i]]
@@ -81,6 +81,6 @@ def repair_individual(individual, problem, minimum_shipment_weight=300):
             scale = capacity / total_supply
             X[i, :] *= scale
 
-    # Individual reassembly
+    # Individual reassembly / Reensamblaje del individuo
     repaired_ind = X.flatten().tolist() + Delta.flatten().astype(int).tolist()
     return repaired_ind
